@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portfolio - แฟ้มสะสมผลงานสมัครเรียนต่อ ม.1</title>
+    <!-- นำเข้า Tailwind CSS สำหรับจัดรูปแบบที่สวยงามและรองรับทุกหน้าจอ -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- นำเข้าฟอนต์ Prompt จาก Google Fonts เพื่อความทันสมัยและอ่านง่าย -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- นำเข้าไอคอน Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        /* พื้นหลังแบนเนอร์ไล่เฉดสีพาสเทลตามแบบ UI ต้นฉบับ */
+        .hero-gradient {
+            background: linear-gradient(120deg, #e0e7ff 0%, #fae8ff 45%, #dbeafe 85%, #f3e8ff 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-gradient::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 15%;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(99,102,241,0.35) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            filter: blur(30px);
+        }
+        .hero-gradient::after {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: 20%;
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(circle, rgba(236,72,153,0.22) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            filter: blur(25px);
+        }
+        /* สไตล์แท็บที่กำลังเลือก */
+        .tab-active {
+            border-bottom: 2.5px solid #0f172a;
+            color: #0f172a;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- แถบนำทางด้านบน (Navbar) -->
+    <nav class="bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-slate-100">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- โลโก้ Portfolio -->
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow-sm">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                </div>
+                <span class="font-bold text-lg tracking-tight text-slate-900">Portfolio<span class="text-indigo-600">.M1</span></span>
+            </div>
+
+            <!-- เมนูลัดสำหรับคณะกรรมการ -->
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-500">
+                <button onclick="switchTab('projects')" class="hover:text-slate-900 transition">ผลงานเด่น</button>
+                <button onclick="switchTab('certificates')" class="hover:text-slate-900 transition">เกียรติบัตร</button>
+                <button onclick="switchTab('activities')" class="hover:text-slate-900 transition">กิจกรรมจิตอาสา</button>
+                <button onclick="switchTab('about')" class="hover:text-slate-900 transition">ประวัติส่วนตัว</button>
+            </div>
+
+            <!-- ปุ่มพิมพ์ / บันทึก PDF สำหรับกรรมการ -->
+            <div class="flex items-center gap-3">
+                <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-full transition flex items-center gap-1.5 shadow-sm">
+                    <i data-lucide="printer" class="w-4 h-4"></i>
+                    <span>พิมพ์ / PDF</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ส่วนหัวโปรไฟล์ (Hero Banner & Student Info) -->
+    <header class="bg-white border-b border-slate-200/80">
+        <!-- แบนเนอร์สีพาสเทล -->
+        <div class="hero-gradient h-44 sm:h-52 w-full"></div>
+
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+            <div class="relative flex flex-col lg:flex-row lg:items-end justify-between -mt-20 sm:-mt-24 gap-6">
+                
+                <!-- ฝั่งซ้าย: รูปโปรไฟล์ + ชื่อและเป้าหมายการเรียนต่อ -->
+                <div class="flex flex-col sm:flex-row sm:items-end gap-6">
+                    <!-- รูปถ่ายนักเรียน (เปลี่ยนลิงก์รูปภาพใน src ได้เลย) -->
+                    <div class="relative shrink-0">
+                        <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=80" 
+                             alt="รูปโปรไฟล์นักเรียน" 
+                             class="w-36 h-36 sm:w-44 sm:h-44 rounded-3xl object-cover border-4 border-white shadow-lg bg-slate-100">
+                        <span class="absolute bottom-2 right-2 bg-emerald-500 w-4 h-4 rounded-full border-2 border-white" title="พร้อมรับการสัมภาษณ์"></span>
+                    </div>
+
+                    <!-- ข้อมูลชื่อและแผนการเรียน -->
+                    <div class="pb-1">
+                        <div class="flex flex-wrap items-center gap-2.5">
+                            <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">เด็กชายธนกฤต รักเรียนดี</h1>
+                            <span class="bg-indigo-600 text-white text-xs font-semibold px-2.5 py-1 rounded-md flex items-center gap-1 shadow-sm">
+                                ม.1 <i data-lucide="zap" class="w-3 h-3 fill-current"></i>
+                            </span>
+                        </div>
+                        <p class="text-slate-600 text-sm sm:text-base mt-1 font-medium">
+                            ผู้สมัครเข้าศึกษาต่อระดับชั้นมัธยมศึกษาปีที่ 1 (ห้องเรียนพิเศษวิทยาศาสตร์-คณิตศาสตร์ และเทคโนโลยี)
+                        </p>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-0.5 flex items-center gap-1">
+                            <i data-lucide="school" class="w-3.5 h-3.5"></i> สำเร็จการศึกษาระดับชั้น ป.6 จาก โรงเรียนอัสสัมชัญลำปาง
+                        </p>
+
+                        <!-- ปุ่มดำเนินการหลัก -->
+                        <div class="flex flex-wrap items-center gap-3 mt-4">
+                            <button onclick="openModal('เหตุผลและความตั้งใจในการเข้าศึกษาต่อ', 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=80', 'Statement of Purpose', 'ผมมีความสนใจในด้านวิทยาการคำนวณ หุ่นยนต์ และการแก้ปัญหาเชิงตรรกะมาตั้งแต่ระดับประถมศึกษา การได้เข้าศึกษาต่อในระดับชั้นมัธยมศึกษาปีที่ 1 ณ โรงเรียนแห่งนี้ จะเป็นโอกาสสำคัญที่ทำให้ผมได้พัฒนาศักยภาพทางวิชาการ ควบคู่ไปกับการทำงานร่วมกับผู้อื่น และนำความรู้มาสร้างนวัตกรรมที่เป็นประโยชน์ต่อสังคมครับ')" 
+                                    class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium px-5 py-2.5 rounded-full transition shadow-sm flex items-center gap-2">
+                                <i data-lucide="message-square-quote" class="w-4 h-4"></i>
+                                <span>คำแนะนำตัวต่อกรรมการ</span>
+                            </button>
+                            <button onclick="switchTab('about')" 
+                                    class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-sm font-medium px-5 py-2.5 rounded-full transition flex items-center gap-2">
+                                <i data-lucide="phone" class="w-4 h-4"></i>
+                                <span>ข้อมูลติดต่อ</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ฝั่งขวา: ตราสัญลักษณ์ทักษะ (Badges) และสถิติสำคัญ (Stats) -->
+                <div class="flex flex-col items-start lg:items-end justify-between gap-5 pt-2">
+                    <!-- ตราสัญลักษณ์ทักษะ 3 วงกลมตามต้นแบบ -->
+                    <div class="flex items-center gap-2.5" title="ทักษะความสามารถเด่น">
+                        <div class="w-10 h-10 rounded-full bg-orange-500 text-white flex flex-col items-center justify-center shadow-sm" title="ทักษะ Coding & Scratch">
+                            <span class="text-[11px] font-bold leading-none">Code</span>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-indigo-500 text-white flex flex-col items-center justify-center shadow-sm" title="ทักษะวิทยาศาสตร์และหุ่นยนต์">
+                            <span class="text-[11px] font-bold leading-none">STEM</span>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-slate-900 text-white flex flex-col items-center justify-center shadow-sm" title="ความเป็นผู้นำและจิตอาสา">
+                            <span class="text-[11px] font-bold leading-none">Lead</span>
+                        </div>
+                    </div>
+
+                    <!-- สถิติ 3 คอลัมน์ (GPAX / เกียรติบัตร / โครงงาน) -->
+                    <div class="flex items-center gap-6 sm:gap-8 border-t lg:border-t-0 pt-3 lg:pt-0 w-full lg:w-auto">
+                        <div>
+                            <span class="block text-xs text-slate-400 font-medium">เกรดเฉลี่ยสะสม (ป.4-ป.6)</span>
+                            <span class="text-2xl font-bold text-slate-900">3.96</span>
+                        </div>
+                        <div class="h-8 w-px bg-slate-200"></div>
+                        <div>
+                            <span class="block text-xs text-slate-400 font-medium">เกียรติบัตรรางวัล</span>
+                            <span class="text-2xl font-bold text-slate-900">14</span>
+                        </div>
+                        <div class="h-8 w-px bg-slate-200"></div>
+                        <div>
+                            <span class="block text-xs text-slate-400 font-medium">ผลงานโครงงาน</span>
+                            <span class="text-2xl font-bold text-slate-900">6</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- แถบเมนูแท็บหมวดหมู่ (Tabs Navigation) -->
+            <div class="flex items-center gap-6 sm:gap-8 mt-8 border-b border-slate-100 overflow-x-auto">
+                <button id="tab-btn-projects" onclick="switchTab('projects')" class="tab-active pb-3.5 text-sm whitespace-nowrap flex items-center gap-1.5 transition">
+                    <span>ผลงานเด่น (Projects)</span>
+                    <span class="text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded-full">6</span>
+                </button>
+                <button id="tab-btn-certificates" onclick="switchTab('certificates')" class="pb-3.5 text-sm text-slate-500 hover:text-slate-900 whitespace-nowrap flex items-center gap-1.5 transition">
+                    <span>เกียรติบัตร (Certificates)</span>
+                    <span class="text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded-full">4</span>
+                </button>
+                <button id="tab-btn-activities" onclick="switchTab('activities')" class="pb-3.5 text-sm text-slate-500 hover:text-slate-900 whitespace-nowrap transition">
+                    กิจกรรมและจิตอาสา (Activities)
+                </button>
+                <button id="tab-btn-about" onclick="switchTab('about')" class="pb-3.5 text-sm text-slate-500 hover:text-slate-900 whitespace-nowrap transition">
+                    ประวัติส่วนตัว (About Me)
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- พื้นที่แสดงเนื้อหาหลัก (Main Content) -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- 1. แท็บผลงานเด่น (Projects Grid - รูปแบบการ์ด 3 คอลัมน์ตามต้นแบบ) -->
+        <section id="section-projects" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+            
+            <!-- การ์ดผลงานที่ 1 -->
+            <div onclick="openModal('เกมตะลุยด่านคำสั่ง Scratch Adventure', 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80', 'วิทยาการคำนวณ • Scratch 3.0', 'พัฒนาเกมฝึกทักษะการคิดเชิงคำนวณ (Computational Thinking) โดยออกแบบตัวละครและเขียนสคริปต์ควบคุมเงื่อนไขด้วยโปรแกรม Scratch 3.0 ได้รับรางวัลเหรียญทองระดับกลุ่มโรงเรียน')" 
+                 class="group cursor-pointer">
+                <div class="relative rounded-2xl overflow-hidden bg-sky-100 aspect-[4/3] shadow-sm border border-slate-200/60">
+                    <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80" alt="โครงงาน Scratch" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                    <span class="absolute top-3 right-3 bg-orange-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow">Code</span>
+                </div>
+                <div class="mt-3 flex items-center justify-between">
+                    <div>
+                        <h3 class="font-semibold text-slate-900 group-hover:text-indigo-600 transition">เกมตะลุยด่าน Scratch Adventure</h3>
+                        <p class="text-xs text-slate-500 mt-0.5">Coding, Game Design</p>
+                    </div>
+                    <div class="flex items-center gap-3 text-xs text-slate-500 font-medium">
+                        <span class="flex items-center gap-1"><i data-lucide="award" class="w-3.5 h-3.5 text-amber-500"></i> เหรียญทอง</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- การ์ดผลงานที่ 2 -->
+            <div onclick="openModal('เว็บไซต์แนะนำสัตว์เลี้ยงแสนรัก (HTML5 & CSS3)', 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80', 'พัฒนาเว็บไซต์ • HTML5 / CSS3', 'ออกแบบและเขียนโค้ดเว็บไซต์ด้วยภาษา HTML5 และ CSS3 จัดวางเลย์เอาต์แบบ Responsive และเผยแพร่ผลงานขึ้นสู่ระบบออนไลน์ผ่าน GitHub Pages')" 
+                 class="group cursor-pointer">
+                <div class="relative rounded-2xl overflow-hidden bg-slate-200 aspect-[4/3] shadow-sm border border-slate-200/60">
+                    <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=600&q=80" alt="โครงงานเว็บไซต์" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                    <span class="absolute top-3 right-3 bg-indigo-600 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow">Web</span>
+                </div>
+                <div class="mt-3 flex items-center justify-between">
+                    <div>
+                        <h3 class="font-semibold text-slate-900 group-hover:text-indigo-600 transition">เว็บไซต์ "สัตว์เลี้ยงของฉัน"</h3>
+                        <p class="text-xs text-slate-500 mt-0.5">HTML5, CSS3, GitHub Pages</p>
+                    </div>
+                    <div class="flex items-center gap-3 text-xs text-slate-500 font-medium">
+                        <span class="flex items-center gap-1"><i data-lucide="star" class="w-3.5 h-3.5 text-indigo-500"></i> ดีเยี่ยม</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- การ์ดผลงานที่ 3 -->
+            <div onclick="openModal('โครงงานวิทยาศาสตร์: เครื่องรดน้ำต้นไม้อัตโนมัติ', 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=800&q=80', 'นวัตกรรม STEM & IoT', 'ประดิษฐ์ระบบวัดความชื้นในดินและสั่งการปั๊มน้ำขนาดเล็กอัตโนมัติด้วยบอร์ดสมองกลฝังตัว ช่วยประหยัดน้ำในการดูแลแปลงเกษตรของโรงเรียน')" 
+                 class="group cursor-pointer">
+                <div class="relative rounded-2xl overflow-hidden bg-blue-100 aspect-[4/3] shadow-sm border border-slate-200/60">
+                    <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=600&q=80" alt="โครงงาน STEM" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                    <div class="absolute top-3 right-3 flex gap-1.5">
+                        <span class="bg-orange-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow">STEM</span>
+                        <span class="bg-indigo-600 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow">IoT</span>
+                    </div>
+                </div>
+                <div class="mt-3 flex items-center justify-between">
+                    <div>
+                        <h3 class="font-semibold text-slate-900 group-hover:text-indigo-600 transition">เครื่องรดน้ำต้นไม้อัตโนมัติ</h3>
+                        <p class="text-xs text-slate-500 mt-0.5">Science Project, Microcontroller</p>
+                    </div>
+                    <div class="flex items-center gap-3 text-xs text-slate-500 font-medium">
+                        <span class="flex items-center gap-1"><i data-lucide="trophy" class="w-3.5 h-3.5 text-amber-500"></i> ชนะเลิศ</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- การ์ดผลงานที่ 4 -->
+            <div onclick="openModal('สื่อโฮโลแกรม 3 มิติ ระบบสุริยะ (STREAM Project)', 'https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?auto=format&fit=crop&w=800&q=80', 'บูรณาการวิทยาศาสตร์และศิลปะ', 'สร้างพีระมิดสะท้อนแสงและเขียนเว็บแสดงผลภาพ 4 ทิศทาง เพื่อจำลองการโคจรของดาวเคราะห์ในระบบสุริยะแบบ 3 มิติ')" 
+                 class="group cursor-pointer">
+                <div class="relative rounded-2xl overflow-hidden bg-purple-100 aspect-[4/3] shadow-sm border border-slate-200/60">
+                    <img src="https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?auto=format&fit=crop&w=600&q=80" alt="โฮโลแกรม 3 มิติ" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                </div>
+                <div class="mt-3 flex items-center justify-between">
+                    <div>
+                        <h3 class="font-semibold text-slate-900 group-hover:text-indigo-600 transition">โฮโลแกรม 3 มิติ ระบบสุริยะ</h3>
+                        <p class="text-xs text-slate-500 mt-0.5">STREAM Education, 3D Display</p>
+                    </div>
+                    <div class="flex items-center gap-3 text-xs text-slate-500 font-medium">
+                        <span class="flex items-center gap-1"><i data-lucide="sparkles" class="w-3.5 h-3.5 text-purple-500"></i> นวัตกรรม</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- การ์ดผลงานที่ 5 -->
+            <div onclick="openModal('ตัดต่อวิดีโอสั้นรณรงค์รักษ์สิ่งแวดล้อมด้วย AI', 'https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&w=800&q=80', 'สื่อดิจิทัลสร้างสรรค์', 'ผลิตวิดีโอสื่อสร้างสรรค์ความยาว 2 นาที เรื่องการคัดแยกขยะในโรงเรียน โดยใช้เครื่องมือ AI ช่วยสร้างภาพประกอบและพากย์เสียง')" 
+                 class="group cursor-pointer">
+                <div class="relative rounded-2xl overflow-hidden bg-emerald-100 aspect-[4/3] shadow-sm border border-slate-200/60">
+                    <img src="https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&w=600&q=80" alt="วิดีโอ AI" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                </div>
+                <div class="mt-3 flex items-center justify-between">
+                    <div>
+                        <h3 class="font-semibold text-slate-900 group-hover:text-indigo-600 transition">วิดีโอรณรงค์คัดแยกขยะด้วย AI</h3>
+                        <p class="text-xs text-slate-500 mt-0.5">AI Video Editing, Digital Media</p>
+                    </div>
+                    <div class="flex items-center gap-3 text-xs text-slate-500 font-medium">
+                        <span class="flex items-center gap-1"><i data-lucide="award" class="w-3.5 h-3.5 text-amber-500"></i> รองชนะเลิศ</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- การ์ดผลงานที่ 6 -->
+            <div onclick="openModal('สมุดบันทึกสรุปสูตรคณิตศาสตร์ ป.6', 'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=800&q=80', 'คณิตศาสตร์และตรรกศาสตร์', 'รวบรวมและสรุปเนื้อหาคณิตศาสตร์ระดับประถมศึกษาตอนปลายในรูปแบบ Mind Mapping เพื่อใช้ติวสอบร่วมกับเพื่อนในชั้นเรียน')" 
+                 class="group cursor-pointer">
+                <div class="relative rounded-2xl overflow-hidden bg-amber-100 aspect-[4/3] shadow-sm border border-slate-200/60">
+                    <img src="https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=600&q=80" alt="สรุปคณิตศาสตร์" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                </div>
+                <div class="mt-3 flex items-center justify-between">
+                    <div>
+                        <h3 class="font-semibold text-slate-900 group-hover:text-indigo-600 transition">Mind Map สรุปคณิตศาสตร์ ป.6</h3>
+                        <p class="text-xs text-slate-500 mt-0.5">Mathematics, Visual Note</p>
+                    </div>
+                    <div class="flex items-center gap-3 text-xs text-slate-500 font-medium">
+                        <span class="flex items-center gap-1"><i data-lucide="book-open" class="w-3.5 h-3.5 text-emerald-600"></i> วิชาการ</span>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- 2. แท็บเกียรติบัตร (Certificates - ซ่อนไว้เริ่มต้น) -->
+        <section id="section-certificates" class="hidden grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div onclick="openModal('เกียรติบัตรรางวัลเหรียญทอง การแข่งขันเขียนโปรแกรม Scratch', 'https://images.unsplash.com/photo-1589330694653-ded6df03f754?auto=format&fit=crop&w=800&q=80', 'ปีการศึกษา 2569', 'การแข่งขันศิลปหัตถกรรมนักเรียน ระดับเขตพื้นที่การศึกษา รายการการสร้างเกมสร้างสรรค์จากคอมพิวเตอร์ ป.4-ป.6')" 
+                 class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-start gap-4 cursor-pointer hover:border-indigo-300 transition">
+                <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
+                    <i data-lucide="award" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold text-indigo-600">ระดับเขตพื้นที่การศึกษา • 2569</span>
+                    <h3 class="font-bold text-slate-900 mt-0.5">รางวัลเหรียญทอง การแข่งขันสร้างเกมด้วย Scratch</h3>
+                    <p class="text-sm text-slate-500 mt-1">คลิกเพื่อดูภาพเกียรติบัตรฉบับเต็ม</p>
+                </div>
+            </div>
+
+            <div onclick="openModal('เกียรติบัตรผ่านการทดสอบทักษะภาษาอังกฤษระดับประถมศึกษา', 'https://images.unsplash.com/photo-1589330694653-ded6df03f754?auto=format&fit=crop&w=800&q=80', 'ปีการศึกษา 2569', 'ได้รับคะแนนผลการประเมินทักษะการฟังและการอ่านภาษาอังกฤษในระดับดีเยี่ยม (92 คะแนน)')" 
+                 class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-start gap-4 cursor-pointer hover:border-indigo-300 transition">
+                <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
+                    <i data-lucide="medal" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold text-indigo-600">ด้านภาษาต่างประเทศ • 2569</span>
+                    <h3 class="font-bold text-slate-900 mt-0.5">เกียรติบัตรผลการทดสอบวัดระดับภาษาอังกฤษ ดีเยี่ยม</h3>
+                    <p class="text-sm text-slate-500 mt-1">คลิกเพื่อดูภาพเกียรติบัตรฉบับเต็ม</p>
+                </div>
+            </div>
+
+            <div onclick="openModal('เกียรติบัตรนักเรียนที่มีความประพฤติดีและมีจิตอาสา', 'https://images.unsplash.com/photo-1589330694653-ded6df03f754?auto=format&fit=crop&w=800&q=80', 'โรงเรียนอัสสัมชัญลำปาง', 'ได้รับคัดเลือกเป็นตัวแทนนักเรียนดีเด่นด้านความมีวินัยและช่วยเหลือส่วนรวม ประจำปีการศึกษา 2569')" 
+                 class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-start gap-4 cursor-pointer hover:border-indigo-300 transition">
+                <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                    <i data-lucide="heart-handshake" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold text-emerald-600">ด้านคุณธรรมจริยธรรม • 2569</span>
+                    <h3 class="font-bold text-slate-900 mt-0.5">เกียรติบัตรนักเรียนดีเด่นด้านความประพฤติและจิตอาสา</h3>
+                    <p class="text-sm text-slate-500 mt-1">คลิกเพื่อดูภาพเกียรติบัตรฉบับเต็ม</p>
+                </div>
+            </div>
+
+            <div onclick="openModal('เกียรติบัตรการแข่งขันตอบปัญหาวิทยาศาสตร์และคณิตศาสตร์', 'https://images.unsplash.com/photo-1589330694653-ded6df03f754?auto=format&fit=crop&w=800&q=80', 'วันวิทยาศาสตร์แห่งชาติ 2569', 'รางวัลรองชนะเลิศอันดับ 1 การแข่งขันตอบปัญหาความรู้ทั่วไปทางวิทยาศาสตร์และเทคโนโลยี')" 
+                 class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-start gap-4 cursor-pointer hover:border-indigo-300 transition">
+                <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center shrink-0">
+                    <i data-lucide="flask-conical" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-semibold text-purple-600">ด้านวิทยาศาสตร์ • 2569</span>
+                    <h3 class="font-bold text-slate-900 mt-0.5">รองชนะเลิศอันดับ 1 ตอบปัญหาวิทยาศาสตร์</h3>
+                    <p class="text-sm text-slate-500 mt-1">คลิกเพื่อดูภาพเกียรติบัตรฉบับเต็ม</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. แท็บกิจกรรมและจิตอาสา (Activities) -->
+        <section id="section-activities" class="hidden space-y-5">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+                    <div>
+                        <span class="text-xs font-semibold bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-full">ความเป็นผู้นำ</span>
+                        <h3 class="text-lg font-bold text-slate-900 mt-2">นายหมู่ลูกเสือสำรอง และหัวหน้าห้องเรียนชั้น ป.6</h3>
+                    </div>
+                    <span class="text-sm text-slate-400">ปีการศึกษา 2569</span>
+                </div>
+                <p class="text-slate-600 text-sm mt-3 leading-relaxed">
+                    ปฏิบัติหน้าที่ดูแลความเรียบร้อยของเพื่อนในชั้นเรียน ประสานงานระหว่างครูประจำชั้นและนักเรียน รวมถึงเป็นผู้นำในการทำกิจกรรมเข้าค่ายพักแรมลูกเสือ ฝึกความรับผิดชอบและการทำงานเป็นทีม
+                </p>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+                    <div>
+                        <span class="text-xs font-semibold bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-full">จิตอาสา</span>
+                        <h3 class="text-lg font-bold text-slate-900 mt-2">ยุวบรรณารักษ์ห้องสมุด และอาสาสมัครสอนน้องเขียนโค้ด</h3>
+                    </div>
+                    <span class="text-sm text-slate-400">ปีการศึกษา 2568 - 2569</span>
+                </div>
+                <p class="text-slate-600 text-sm mt-3 leading-relaxed">
+                    ช่วยจัดเรียงหนังสือและให้บริการยืม-คืนในห้องสมุดช่วงพักกลางวัน และเป็นพี่เลี้ยงช่วยสอนพื้นฐานการใช้โปรแกรม Scratch ให้กับน้องๆ ระดับชั้นประถมศึกษาปีที่ 4 ในชั่วโมงชุมนุมคอมพิวเตอร์
+                </p>
+            </div>
+        </section>
+
+        <!-- 4. แท็บประวัติส่วนตัว (About Me) -->
+        <section id="section-about" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- ข้อมูลพื้นฐาน -->
+            <div class="lg:col-span-2 bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-sm space-y-6">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3">ข้อมูลประวัติส่วนตัว (Personal Profile)</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 text-sm">
+                        <div>
+                            <span class="text-slate-400 block text-xs">ชื่อ - นามสกุล</span>
+                            <span class="font-medium text-slate-800">เด็กชายธนกฤต รักเรียนดี (ชื่อเล่น: น้องต้นกล้า)</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block text-xs">วัน/เดือน/ปีเกิด</span>
+                            <span class="font-medium text-slate-800">14 สิงหาคม พ.ศ. 2557 (อายุ 12 ปี)</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block text-xs">สัญชาติ / ศาสนา</span>
+                            <span class="font-medium text-slate-800">ไทย / พุทธ</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block text-xs">โรงเรียนเดิม</span>
+                            <span class="font-medium text-slate-800">โรงเรียนอัสสัมชัญลำปาง</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block text-xs">วิชาที่ถนัดและชื่นชอบ</span>
+                            <span class="font-medium text-slate-800">วิทยาการคำนวณ, คณิตศาสตร์, วิทยาศาสตร์</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block text-xs">งานอดิเรก</span>
+                            <span class="font-medium text-slate-800">เขียนโปรแกรมเกม, ต่อตัวต่อหุ่นยนต์, อ่านหนังสือวิทยาศาสตร์</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3">เป้าหมายในอนาคต (Future Goal)</h3>
+                    <p class="text-sm text-slate-600 mt-3 leading-relaxed">
+                        มีความมุ่งมั่นที่จะศึกษาต่อในแผนการเรียนที่เน้นด้านวิทยาศาสตร์ คณิตศาสตร์ และเทคโนโลยี เพื่อต่อยอดสู่การเป็น <strong>วิศวกรซอฟต์แวร์หรือนักพัฒนาปัญญาประดิษฐ์ (AI Developer)</strong> ในอนาคต โดยพร้อมที่จะปฏิบัติตามกฎระเบียบของโรงเรียนและตั้งใจศึกษาเล่าเรียนอย่างเต็มความสามารถ
+                    </p>
+                </div>
+            </div>
+
+            <!-- ข้อมูลการติดต่อและทักษะ -->
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+                    <h3 class="text-base font-bold text-slate-900 mb-4">ช่องทางติดต่อ (ผู้ปกครอง/นักเรียน)</h3>
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="phone" class="w-4 h-4 text-indigo-600 shrink-0"></i>
+                            <span>08X-XXX-XXXX (คุณพ่อ/คุณแม่)</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="mail" class="w-4 h-4 text-indigo-600 shrink-0"></i>
+                            <span>tonkla.portfolio@example.com</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-indigo-600 shrink-0"></i>
+                            <span>อำเภอเมือง จังหวัดลำปาง</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+                    <h3 class="text-base font-bold text-slate-900 mb-4">ทักษะความสามารถ (Skills)</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs font-medium bg-slate-100 text-slate-700 px-3 py-1.5 rounded-full">Scratch 3.0</span>
+                        <span class="text-xs font-medium bg-slate-100 text-slate-700 px-3 py-1.5 rounded-full">HTML5 / CSS3</span>
+                        <span class="text-xs font-medium bg-slate-100 text-slate-700 px-3 py-1.5 rounded-full">Micro:bit / STEM</span>
+                        <span class="text-xs font-medium bg-slate-100 text-slate-700 px-3 py-1.5 rounded-full">การนำเสนอหน้าชั้นเรียน</span>
+                        <span class="text-xs font-medium bg-slate-100 text-slate-700 px-3 py-1.5 rounded-full">การทำงานเป็นทีม</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ส่วนท้ายเว็บไซต์ (Footer) -->
+    <footer class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-6 border-t border-slate-200/80 text-center text-xs text-slate-400">
+        <p>จัดทำขึ้นเพื่อประกอบการพิจารณาคัดเลือกเข้าศึกษาต่อระดับชั้นมัธยมศึกษาปีที่ 1 ปีการศึกษา 2570</p>
+    </footer>
+
+    <!-- หน้าต่าง Modal สำหรับขยายดูรายละเอียดผลงาน/เกียรติบัตร -->
+    <div id="detailModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4" onclick="closeModal()">
+        <div class="bg-white rounded-3xl max-w-xl w-full overflow-hidden shadow-2xl transform transition-all" onclick="event.stopPropagation()">
+            <div class="relative h-60 bg-slate-100">
+                <img id="modalImage" src="" alt="ภาพประกอบผลงาน" class="w-full h-full object-cover">
+                <button onclick="closeModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-slate-800 flex items-center justify-center shadow">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="p-6 sm:p-7">
+                <span id="modalCategory" class="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">หมวดหมู่</span>
+                <h3 id="modalTitle" class="text-xl font-bold text-slate-900 mt-3">ชื่อผลงาน</h3>
+                <p id="modalDesc" class="text-sm text-slate-600 mt-2.5 leading-relaxed">รายละเอียดผลงาน</p>
+                <div class="mt-6 flex justify-end">
+                    <button onclick="closeModal()" class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium px-5 py-2 rounded-full transition">
+                        ปิดหน้าต่าง
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- สคริปต์ควบคุมการทำงานของแท็บและ Modal -->
+    <script>
+        // เรียกใช้งานไอคอน Lucide
+        lucide.createIcons();
+
+        // ฟังก์ชันสลับแท็บหมวดหมู่
+        function switchTab(tabName) {
+            const sections = ['projects', 'certificates', 'activities', 'about'];
+            
+            sections.forEach(sec => {
+                const sectionEl = document.getElementById('section-' + sec);
+                const btnEl = document.getElementById('tab-btn-' + sec);
+                
+                if (sec === tabName) {
+                    sectionEl.classList.remove('hidden');
+                    if (btnEl) {
+                        btnEl.classList.add('tab-active');
+                        btnEl.classList.remove('text-slate-500');
+                    }
+                } else {
+                    sectionEl.classList.add('hidden');
+                    if (btnEl) {
+                        btnEl.classList.remove('tab-active');
+                        btnEl.classList.add('text-slate-500');
+                    }
+                }
+            });
+        }
+
+        // ฟังก์ชันเปิดหน้าต่างรายละเอียด (Modal)
+        function openModal(title, imgUrl, category, desc) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalImage').src = imgUrl;
+            document.getElementById('modalCategory').textContent = category;
+            document.getElementById('modalDesc').textContent = desc;
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        // ฟังก์ชันปิดหน้าต่างรายละเอียด
+        function closeModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
