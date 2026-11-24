@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รวมผลงานเว็บไซต์นักเรียน ชั้น ป.6/4</title>
+    <!-- เรียกใช้ฟอนต์ภาษาไทย Sarabun และ Prompt จาก Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- เรียกใช้ Tailwind CSS สำหรับจัดหน้าเว็บให้สวยงามและรองรับทุกหน้าจอ -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+        }
+        h1, h2, .font-prompt {
+            font-family: 'Prompt', sans-serif;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-800">
+
+    <!-- ส่วนหัวเว็บไซต์ (Header) -->
+    <header class="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 text-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4 py-8 text-center">
+            <span class="inline-block bg-amber-400 text-blue-950 font-prompt text-xs font-semibold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">
+                รายวิชาทักษะคอมพิวเตอร์ • ปีการศึกษา 2569
+            </span>
+            <h1 class="text-2xl md:text-4xl font-bold mb-2">
+                คลังผลงานเว็บไซต์นักเรียน ชั้นประถมศึกษาปีที่ 6/4
+            </h1>
+            <p class="text-blue-200 text-sm md:text-base max-w-2xl mx-auto">
+                คลิกที่ปุ่มของนักเรียนแต่ละคนเพื่อเข้าชมผลงานการพัฒนาเว็บไซต์ด้วยภาษา HTML5 และ CSS3
+            </p>
+        </div>
+    </header>
+
+    <!-- ส่วนเนื้อหาหลัก (Main Content) -->
+    <main class="max-w-6xl w-full mx-auto px-4 py-8 flex-grow">
+        
+        <!-- ช่องค้นหาและตัวกรอง -->
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2 text-slate-600 font-prompt text-sm">
+                <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
+                <span>จำนวนผลงานทั้งหมด: <strong id="total-count" class="text-blue-800">0</strong> รายการ</span>
+            </div>
+            <div class="relative w-full sm:w-80">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    onkeyup="filterStudents()" 
+                    placeholder="ค้นหารหัส (เช่น 01) หรือชื่อนักเรียน..." 
+                    class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                >
+                <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+        </div>
+
+        <!-- พื้นที่แสดงการ์ดรายชื่อนักเรียน (สร้างอัตโนมัติจากรายการด้านล่าง) -->
+        <div id="student-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <!-- การ์ดจะถูกสร้างขึ้นที่นี่โดย JavaScript -->
+        </div>
+
+        <!-- ข้อความแจ้งเตือนเมื่อค้นหาไม่พบ -->
+        <div id="no-result" class="hidden text-center py-12 bg-white rounded-xl border border-slate-200">
+            <p class="text-slate-500 font-prompt">ไม่พบข้อมูลรหัสหรือชื่อนักเรียนที่ค้นหา</p>
+        </div>
+
+    </main>
+
+    <!-- ส่วนท้ายเว็บไซต์ (Footer) -->
+    <footer class="bg-slate-900 text-slate-400 text-center py-5 text-sm mt-8">
+        <p class="font-prompt">กลุ่มสาระการเรียนรู้วิทยาศาสตร์และเทคโนโลยี • โรงเรียนอัสสัมชัญลำปาง</p>
+        <p class="text-xs text-slate-500 mt-1">พัฒนาและดูแลระบบโดย ครูไก่ (กิตติทัช สืบธรรมกูร)</p>
+    </footer>
+
+    <!-- ส่วนจัดการข้อมูลรายชื่อและลิงก์ (แก้ไขรายชื่อเพิ่มเติมได้ตรงนี้จุดเดียว) -->
+    <script>
+        // รายชื่อโฟลเดอร์และชื่อนักเรียน (สามารถเพิ่มหรือแก้ไขชื่อจริงต่อท้ายได้เลย)
+        const students = [
+            { folder: "web-p604-01", number: "เลขที่ 01", name: "นักเรียนคนที่ 1 (web-p604-01)" },
+            { folder: "web-p604-02", number: "เลขที่ 02", name: "นักเรียนคนที่ 2 (web-p604-02)" },
+            { folder: "web-p604-03", number: "เลขที่ 03", name: "นักเรียนคนที่ 3 (web-p604-03)" },
+            { folder: "web-p604-04", number: "เลขที่ 04", name: "นักเรียนคนที่ 4 (web-p604-04)" },
+            { folder: "web-p604-05", number: "เลขที่ 05", name: "นักเรียนคนที่ 5 (web-p604-05)" },
+            { folder: "web-p604-06", number: "เลขที่ 06", name: "นักเรียนคนที่ 6 (web-p604-06)" },
+            { folder: "web-p604-07", number: "เลขที่ 07", name: "นักเรียนคนที่ 7 (web-p604-07)" },
+            { folder: "web-p604-08", number: "เลขที่ 08", name: "นักเรียนคนที่ 8 (web-p604-08)" },
+            { folder: "web-p604-09", number: "เลขที่ 09", name: "นักเรียนคนที่ 9 (web-p604-09)" },
+            { folder: "web-p604-10", number: "เลขที่ 10", name: "นักเรียนคนที่ 10 (web-p604-10)" }
+            // สามารถคัดลอกบรรทัดด้านบนแล้ววางต่อท้ายเพื่อเพิ่มเลขที่ 11, 12, ... จนครบทั้งห้องได้ทันที
+        ];
+
+        const gridContainer = document.getElementById('student-grid');
+        const totalCount = document.getElementById('total-count');
+
+        // ฟังก์ชันสร้างการ์ดปุ่มกดเข้าชมเว็บไซต์ของแต่ละคน
+        function renderCards(data) {
+            gridContainer.innerHTML = '';
+            totalCount.textContent = data.length;
+
+            if (data.length === 0) {
+                document.getElementById('no-result').classList.remove('hidden');
+                return;
+            } else {
+                document.getElementById('no-result').classList.add('hidden');
+            }
+
+            data.forEach(student => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-xl p-5 shadow-sm border border-slate-200 hover:shadow-md hover:border-blue-400 transition-all duration-200 flex flex-col justify-between';
+                
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-blue-50 text-blue-700 font-prompt text-xs font-semibold px-2.5 py-1 rounded-md border border-blue-100">
+                                ${student.number}
+                            </span>
+                            <span class="text-xs text-slate-400 font-mono">${student.folder}</span>
+                        </div>
+                        <h2 class="font-prompt font-semibold text-slate-800 text-base mb-4 line-clamp-1">
+                            ${student.name}
+                        </h2>
+                    </div>
+                    <a href="./${student.folder}/" target="_blank" 
+                       class="w-full inline-flex items-center justify-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-prompt text-sm font-medium py-2.5 px-4 rounded-lg transition-colors">
+                        <span>เข้าชมเว็บไซต์</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                `;
+                gridContainer.appendChild(card);
+            });
+        }
+
+        // ฟังก์ชันค้นหานักเรียน
+        function filterStudents() {
+            const keyword = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = students.filter(s => 
+                s.folder.toLowerCase().includes(keyword) || 
+                s.number.toLowerCase().includes(keyword) || 
+                s.name.toLowerCase().includes(keyword)
+            );
+            renderCards(filtered);
+        }
+
+        // แสดงผลครั้งแรกเมื่อเปิดหน้าเว็บ
+        renderCards
