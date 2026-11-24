@@ -42,7 +42,7 @@
         <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-2 text-slate-600 font-prompt text-sm">
                 <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
-                <span>จำนวนผลงานทั้งหมด: <strong id="total-count" class="text-blue-800">0</strong> รายการ</span>
+                <span>จำนวนผลงานทั้งหมด: <strong id="total-count" class="text-blue-800">45</strong> รายการ</span>
             </div>
             <div class="relative w-full sm:w-80">
                 <input 
@@ -76,21 +76,54 @@
         <p class="text-xs text-slate-500 mt-1">พัฒนาและดูแลระบบโดย ครูไก่ (กิตติทัช สืบธรรมกูร)</p>
     </footer>
 
-    <!-- ส่วนจัดการข้อมูลรายชื่อและลิงก์ (แก้ไขรายชื่อเพิ่มเติมได้ตรงนี้จุดเดียว) -->
+    <!-- ส่วนจัดการข้อมูลรายชื่อและลิงก์ (ครบทั้ง 45 คนตามลำดับเลขที่) -->
     <script>
-        // รายชื่อโฟลเดอร์และชื่อนักเรียน (สามารถเพิ่มหรือแก้ไขชื่อจริงต่อท้ายได้เลย)
         const students = [
-            { folder: "web-p604-01", number: "เลขที่ 01", name: "นักเรียนคนที่ 1 (web-p604-01)" },
-            { folder: "web-p604-02", number: "เลขที่ 02", name: "นักเรียนคนที่ 2 (web-p604-02)" },
-            { folder: "web-p604-03", number: "เลขที่ 03", name: "นักเรียนคนที่ 3 (web-p604-03)" },
-            { folder: "web-p604-04", number: "เลขที่ 04", name: "นักเรียนคนที่ 4 (web-p604-04)" },
-            { folder: "web-p604-05", number: "เลขที่ 05", name: "นักเรียนคนที่ 5 (web-p604-05)" },
-            { folder: "web-p604-06", number: "เลขที่ 06", name: "นักเรียนคนที่ 6 (web-p604-06)" },
-            { folder: "web-p604-07", number: "เลขที่ 07", name: "นักเรียนคนที่ 7 (web-p604-07)" },
-            { folder: "web-p604-08", number: "เลขที่ 08", name: "นักเรียนคนที่ 8 (web-p604-08)" },
-            { folder: "web-p604-09", number: "เลขที่ 09", name: "นักเรียนคนที่ 9 (web-p604-09)" },
-            { folder: "web-p604-10", number: "เลขที่ 10", name: "นักเรียนคนที่ 10 (web-p604-10)" }
-            // สามารถคัดลอกบรรทัดด้านบนแล้ววางต่อท้ายเพื่อเพิ่มเลขที่ 11, 12, ... จนครบทั้งห้องได้ทันที
+            { folder: "web-p604-01", number: "เลขที่ 01", name: "Phitchayut" },
+            { folder: "web-p604-02", number: "เลขที่ 02", name: "Arinrada" },
+            { folder: "web-p604-03", number: "เลขที่ 03", name: "Chayabhak" },
+            { folder: "web-p604-04", number: "เลขที่ 04", name: "Kunnada" },
+            { folder: "web-p604-05", number: "เลขที่ 05", name: "Phuwit" },
+            { folder: "web-p604-06", number: "เลขที่ 06", name: "Jitanon" },
+            { folder: "web-p604-07", number: "เลขที่ 07", name: "Teeradon" },
+            { folder: "web-p604-08", number: "เลขที่ 08", name: "Sujira" },
+            { folder: "web-p604-09", number: "เลขที่ 09", name: "Nattanan" },
+            { folder: "web-p604-10", number: "เลขที่ 10", name: "Kanyaphat" },
+            { folder: "web-p604-11", number: "เลขที่ 11", name: "Pindit" },
+            { folder: "web-p604-12", number: "เลขที่ 12", name: "Irada" },
+            { folder: "web-p604-13", number: "เลขที่ 13", name: "Paphawin" },
+            { folder: "web-p604-14", number: "เลขที่ 14", name: "Racheall" },
+            { folder: "web-p604-15", number: "เลขที่ 15", name: "Nutnicha" },
+            { folder: "web-p604-16", number: "เลขที่ 16", name: "Thanyapat" },
+            { folder: "web-p604-17", number: "เลขที่ 17", name: "Kitnuttakorn" },
+            { folder: "web-p604-18", number: "เลขที่ 18", name: "Phunyapat" },
+            { folder: "web-p604-19", number: "เลขที่ 19", name: "Natthasit" },
+            { folder: "web-p604-20", number: "เลขที่ 20", name: "Panuruj" },
+            { folder: "web-p604-21", number: "เลขที่ 21", name: "Thanaporn" },
+            { folder: "web-p604-22", number: "เลขที่ 22", name: "Saranpat" },
+            { folder: "web-p604-23", number: "เลขที่ 23", name: "Namphet" },
+            { folder: "web-p604-24", number: "เลขที่ 24", name: "Nuttawat" },
+            { folder: "web-p604-25", number: "เลขที่ 25", name: "Natnicha" },
+            { folder: "web-p604-26", number: "เลขที่ 26", name: "Supakorn" },
+            { folder: "web-p604-27", number: "เลขที่ 27", name: "Natthanichar" },
+            { folder: "web-p604-28", number: "เลขที่ 28", name: "Nayada" },
+            { folder: "web-p604-29", number: "เลขที่ 29", name: "Natthanicha" },
+            { folder: "web-p604-30", number: "เลขที่ 30", name: "Achira" },
+            { folder: "web-p604-31", number: "เลขที่ 31", name: "Piyatida" },
+            { folder: "web-p604-32", number: "เลขที่ 32", name: "Patthanun" },
+            { folder: "web-p604-33", number: "เลขที่ 33", name: "Thanapat" },
+            { folder: "web-p604-34", number: "เลขที่ 34", name: "Pattamaporn" },
+            { folder: "web-p604-35", number: "เลขที่ 35", name: "Kritsakorn" },
+            { folder: "web-p604-36", number: "เลขที่ 36", name: "Thiratchanan" },
+            { folder: "web-p604-37", number: "เลขที่ 37", name: "Taweechot" },
+            { folder: "web-p604-38", number: "เลขที่ 38", name: "Natcha" },
+            { folder: "web-p604-39", number: "เลขที่ 39", name: "Cithiphat" },
+            { folder: "web-p604-40", number: "เลขที่ 40", name: "Krittachaya" },
+            { folder: "web-p604-41", number: "เลขที่ 41", name: "Jittipat" },
+            { folder: "web-p604-42", number: "เลขที่ 42", name: "Ploynapatsorn" },
+            { folder: "web-p604-43", number: "เลขที่ 43", name: "Karin" },
+            { folder: "web-p604-44", number: "เลขที่ 44", name: "Peerapatch" },
+            { folder: "web-p604-45", number: "เลขที่ 45", name: "Songthan" }
         ];
 
         const gridContainer = document.getElementById('student-grid');
@@ -120,7 +153,7 @@
                             </span>
                             <span class="text-xs text-slate-400 font-mono">${student.folder}</span>
                         </div>
-                        <h2 class="font-prompt font-semibold text-slate-800 text-base mb-4 line-clamp-1">
+                        <h2 class="font-prompt font-semibold text-slate-800 text-lg mb-4 line-clamp-1">
                             ${student.name}
                         </h2>
                     </div>
@@ -148,4 +181,7 @@
         }
 
         // แสดงผลครั้งแรกเมื่อเปิดหน้าเว็บ
-        renderCards
+        renderCards(students);
+    </script>
+</body>
+</html>
